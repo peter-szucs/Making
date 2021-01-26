@@ -1,21 +1,58 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useContext, useState } from 'react';
+import { Button, StyleSheet, Text, View } from 'react-native';
+import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
+import { AuthContext } from '../context/AuthContext';
+import { styles, buttons } from '../styles/styles';
 
-export default function Login() {
-  return (
-    <View style={styles.container}>
-      <Text>Login Screen</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+export default function Login({ navigation }) {
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+
+    const { setIsCreatingUser, logIn } = useContext(AuthContext)
+
+    const submitLogin = () => {
+        console.log("Logging in")
+        logIn(email, password)
+    }
+
+    const createUser = () => {
+        console.log("Creating User")
+        //setIsCreatingUser(true)
+        navigation.navigate("CreateUser")
+    }
+
+    return (
+        <View style={styles.container}>
+        <Text style={{ fontSize: 36, fontWeight: 'bold', padding: 10 }}>Login</Text>
+        <View style={styles.inputView}>
+            <TextInput
+                style={styles.textInput}
+                placeholder="Email"
+                keyboardType="email-address"
+                value={email}
+                onChangeText={setEmail} />
+            </View>
+        <View style={styles.inputView}>
+            <TextInput
+                style={styles.textInput}
+                placeholder="Password"
+                keyboardType="default"
+                secureTextEntry={true}
+                value={password}
+                onChangeText={setPassword} />
+        </View>
+        <View style={styles.inputView}>
+            <TouchableOpacity
+                style={buttons.primary}
+                onPress={submitLogin}>
+                    <Text style={{ fontSize: 18 }}>Log In</Text>
+            </TouchableOpacity>
+        </View>
+        
+        <Button title="No user? Create one here" onPress={createUser} />
+        <StatusBar style="auto" />
+        </View>
+    );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

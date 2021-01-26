@@ -1,8 +1,18 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useContext } from 'react';
+import { Button, StyleSheet, Text, View } from 'react-native';
+import { AuthContext } from '../context/AuthContext';
 
-export default function Main() {
+export default function Main({ navigation }) {
+  const { user, signOut } = useContext(AuthContext)
+
+  navigation.setOptions({
+    headerRight: () => (
+      <Button 
+        title="Log Out"
+        onPress={() => signOut()} />
+    )
+  })
   return (
     <View style={styles.container}>
       <Text>Main Screen</Text>
