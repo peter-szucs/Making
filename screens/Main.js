@@ -10,9 +10,15 @@ export default function Main({ navigation }) {
     headerRight: () => (
       <Button 
         title="Log Out"
-        onPress={() => signOut()} />
+        onPress={logOut} />
     )
   })
+
+  const logOut = () => {
+    console.log("Loggin out")
+    signOut()
+  }
+
   return (
     <View style={styles.container}>
       <Text>Main Screen</Text>
