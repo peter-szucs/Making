@@ -1,11 +1,13 @@
 import React from 'react';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Image, StyleSheet, Text, View } from 'react-native';
+
+let logo = require('../assets/Logo.png')
 
 export default function Splash() {
     return (
         <View style={styles.container}>
             <View style={{ padding: 20 }}>
-                <Text style={{ fontSize: 42, fontWeight: 'bold' }}>App logo</Text>
+                <Image source={logo} />
             </View>
             <ActivityIndicator animating={true} size="large"/>
         </View>

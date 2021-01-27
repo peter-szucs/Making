@@ -28,7 +28,7 @@ export default function AuthenticatedStack() {
           activeTintColor: '#4fb39f',
           inactiveTintColor: '#a2a2a2',
           activeBackgroundColor: '#f2f2f2',
-          labelStyle: { fontSize: 14, color: 'black' }
+          labelStyle: { fontSize: 14 }
         }}
         initialRouteName="Main">
         <Tabs.Screen name="Main" component={Main} options={{ tabBarBadge: 3 }}/>
