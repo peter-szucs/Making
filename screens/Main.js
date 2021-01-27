@@ -7,6 +7,7 @@ import { styles, buttons } from '../styles/styles';
 export default function Main({ navigation }) {
   const { user, signOut } = useContext(AuthContext)
 
+  // Will be removed, put in profile
   navigation.setOptions({
     headerRight: () => (
       <Button 
