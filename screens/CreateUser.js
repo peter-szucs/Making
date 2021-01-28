@@ -14,7 +14,8 @@ export default function CreateUser() {
     const { signUp } = useContext(AuthContext)
 
     const submitSignUp = () => {
-        signUp(email, password)
+        // Do userinput checking here
+        signUp(email, password, userName)
     }
 
     return (

@@ -1,18 +1,20 @@
 import React, { createContext, useState } from "react";
 import { useEffect } from "react";
-import { auth } from '../firebase';
+import { auth, db } from '../firebase';
 
 export const AuthContext = createContext();
 
 export default function AuthContextProvider({ children }) {
-    const [isCreatingUser, setIsCreatingUser] = useState(false);
     const [user, setUser] = useState();
+    const [uid, setUid] = useState("");
+    const [userName, setUserName] = useState("");
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((user) => {
             console.log("user: ", user)
             setUser(user)
+            setUid(user.uid)
             setIsLoading(false)
         })
 
@@ -38,8 +40,9 @@ export default function AuthContextProvider({ children }) {
         }
     }
 
-    const signUp = async (email, password) => {
+    const signUp = async (email, password, userName) => {
         try {
+            setUserName(userName)
             await auth.createUserWithEmailAndPassword(email, password)
             console.log("Creating User")
         } catch (error) {
@@ -48,7 +51,7 @@ export default function AuthContextProvider({ children }) {
     }
 
     return (
-        <AuthContext.Provider value={{ isLoading, user, logIn, signOut, signUp }}>
+        <AuthContext.Provider value={{ isLoading, user, userName, logIn, signOut, signUp }}>
             {children}
         </AuthContext.Provider>
     );

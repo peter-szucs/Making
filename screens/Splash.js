@@ -6,7 +6,7 @@ let logo = require('../assets/Logo.png')
 export default function Splash() {
     return (
         <View style={styles.container}>
-            <View style={{ padding: 20 }}>
+            <View>
                 <Image source={logo} />
             </View>
             <ActivityIndicator animating={true} size="large"/>

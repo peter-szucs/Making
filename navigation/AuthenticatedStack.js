@@ -31,7 +31,7 @@ export default function AuthenticatedStack() {
           labelStyle: { fontSize: 14 }
         }}
         initialRouteName="Main">
-        <Tabs.Screen name="Main" component={Main} options={{ tabBarBadge: 3 }}/>
+        <Tabs.Screen name="Main" component={Main} options={{ /* tabBarBadge: 3 */ }}/>
         <Tabs.Screen name="Settings" component={Settings} />
       </Tabs.Navigator>   
   );
