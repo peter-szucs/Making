@@ -6,20 +6,21 @@ export const AuthContext = createContext();
 
 export default function AuthContextProvider({ children }) {
     const [user, setUser] = useState();
-    const [uid, setUid] = useState("");
-    const [userName, setUserName] = useState("");
     const [isLoading, setIsLoading] = useState(true);
-
+    
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((user) => {
-            console.log("user: ", user)
+            //console.log("user: ", user)
+            console.log("auth change useEffect called")
             setUser(user)
-            setUid(user.uid)
             setIsLoading(false)
         })
-
         return unsubscribe;
     })
+
+    async function createDatabase(uid, name) {
+        await db.collection('users').doc(uid).set({ userName: name, totalPoints: 0 })
+    }
 
     const logIn = async (email, password) => {
         console.log("calling log in")
@@ -40,18 +41,21 @@ export default function AuthContextProvider({ children }) {
         }
     }
 
-    const signUp = async (email, password, userName) => {
-        try {
-            setUserName(userName)
-            await auth.createUserWithEmailAndPassword(email, password)
+    const signUp = async (email, password, name) => {
+         try {
             console.log("Creating User")
+            await auth.createUserWithEmailAndPassword(email, password)
+            let uid = auth.currentUser.uid
+            console.log("sign up: ", uid)
+            await createDatabase(uid, name)
+            console.log("After database creation wait")
         } catch (error) {
             console.log("error: ", error)
         }
     }
 
     return (
-        <AuthContext.Provider value={{ isLoading, user, userName, logIn, signOut, signUp }}>
+        <AuthContext.Provider value={{ isLoading, user, logIn, signOut, signUp }}>
             {children}
         </AuthContext.Provider>
     );
