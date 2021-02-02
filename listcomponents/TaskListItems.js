@@ -1,20 +1,29 @@
 import React from "react";
-import { Pressable } from "react-native";
-import { styles } from "../styles/styles";
+import { Pressable, Text, View } from "react-native";
+import { styles, text } from "../styles/styles";
 
-export function TaskListItems({ item }) {
-
+export function TaskListItems({ item, navigation }) {
     return (
-        <Pressable
-            style={styles.taskListItems}
-            onPress={() => {
-
-            }}
-            onLongPress={() => {
-
-            }}>
-            <Text style={{ fontSize: 26, fontWeight: 'bold' }}>{item.name}</Text>
-            <Text>{item.tasks.size} tasks in list</Text>
-        </Pressable>
+        <View style={styles.listItemContainer}>
+            <Pressable
+                style={({ pressed }) => [
+                    styles.taskListItems,
+                    {
+                        backgroundColor: pressed
+                        ? '#ffb957' : 'white'
+                    }
+                    ]}
+                onPress={() => {
+                    console.log("pressed")
+                    navigation.navigate('Tasks', { item: item })
+                }}
+                onLongPress={() => {
+                    console.log("Long press")
+                }}>
+                <Text style={text.listTitleBig}>{item.name}</Text>
+                <Text>{item.tasks.length} tasks in list</Text>
+            </Pressable>
+        </View>
+        
     );
 }

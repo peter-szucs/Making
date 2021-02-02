@@ -1,15 +1,29 @@
 import React from "react";
-import { Pressable } from "react-native";
-import { styles } from "../styles/styles";
+import { Pressable, Text, View } from "react-native";
+import { styles, text } from "../styles/styles";
 
-export function ListItems({ item }) {
+export function ListItems({ item, navigation }) {
+    console.log("Item in component: ", item)
     return (
-        <Pressable
-            style={styles.listItems}
-            onPress={() => {
-
-            }} >
-            
-        </Pressable>
+        <View style={styles.listItemContainer}>
+            <Pressable
+                style={({ pressed }) => [
+                    styles.listItems,
+                    {
+                        backgroundColor: pressed
+                        ? '#ffb957' : 'white'
+                    }
+                    ]}
+                onPress={() => {
+                    console.log("pressed")
+                }}
+                onLongPress={() => {
+                    console.log("Long press")
+                }}>
+                <Text style={text.listTitleMedium}>{item.description}</Text>
+                <Text style={{  }}>Expires: {item.expiryDate}</Text>
+            </Pressable>
+        </View>
+        
     );
 }

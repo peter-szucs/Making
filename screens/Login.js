@@ -44,7 +44,7 @@ export default function Login({ navigation }) {
                     placeholder="Password"
                     keyboardType="default"
                     secureTextEntry={true}
-                    autoCapitalize={false}
+                    autoCapitalize="none"
                     value={password}
                     onChangeText={setPassword} />
             </View>

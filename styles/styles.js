@@ -19,12 +19,20 @@ const styles = StyleSheet.create({
     listItems: {
         width: '100%',
         padding: 10,
-        flexDirection: 'column'
+        flexDirection: 'column',
+        backgroundColor: 'white',
+        borderRadius: 10
     },
     taskListItems: {
         width: '100%',
-        padding: 10,
-        flexDirection: 'column'
+        padding: 20,
+        flexDirection: 'column',
+        backgroundColor: 'white',
+        borderRadius: 10
+    },
+    listItemContainer: {
+        paddingHorizontal: 5,
+        paddingVertical: 5
     }
 });
 
@@ -44,7 +52,17 @@ const buttons = StyleSheet.create({
 });
 
 const text =  StyleSheet.create({
-
+    listTitleBig: {
+        fontSize: 26,
+        fontWeight: 'bold',
+        paddingBottom: 10
+    },
+    listTitleMedium: {
+        fontSize: 20,
+        fontWeight: '500',
+        paddingBottom
+        : 10
+    }
 });
 
 export { styles, buttons, text }
