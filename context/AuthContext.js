@@ -37,26 +37,26 @@ export default function AuthContextProvider({ children }) {
     }
     
     async function fetchTasks(uid, list) {
-    let taskItemInfo = { taskId: "", description: "", expiryDate: "", isFinished: false }
-    let taskItemInfoList = []
-    let taskItem = { id: "", name: "", tasks: [{ taskId: "", description: "", expiryDate: "", isFinished: false }] }
+    
     let returnList = []
 
     list.forEach(async function(task) {
+        let taskItemInfo = { taskId: "", description: "", expiryDate: "", isFinished: false }
+        let taskItemInfoList = []
+        let taskItem = { id: "", name: "", tasks: [{ taskId: "", description: "", expiryDate: "", isFinished: false }] }
         taskItem = task
-        console.log("inside task fetching, current task: ", taskItem)
         let dbTasks = await db.collection('users').doc(uid).collection('taskLists').doc(task.id).collection('tasks').get()
         dbTasks.forEach(function(doc) {
+            console.log("inside task fetching, current task: ", taskItem)
             taskItemInfo = doc.data()
             taskItemInfo.taskId = doc.id
             taskItemInfoList.push(taskItemInfo)
             console.log("taskiteminfolist: ", taskItemInfoList)
         })
         taskItem.tasks = taskItemInfoList
-        console.log("Returnlist: ", returnList)
         returnList.push(taskItem)
+        console.log("Returnlist: ", returnList)
     })
-    console.log("When tasks fetched: ", returnList)
     return returnList
     }
 
