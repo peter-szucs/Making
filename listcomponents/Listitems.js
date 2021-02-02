@@ -8,9 +8,8 @@ export function ListItems({ item }) {
             style={styles.listItems}
             onPress={() => {
 
-            }}
-            >
-
+            }} >
+            
         </Pressable>
     );
 }

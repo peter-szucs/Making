@@ -18,11 +18,13 @@ const styles = StyleSheet.create({
     },
     listItems: {
         width: '100%',
-        padding: 10
+        padding: 10,
+        flexDirection: 'column'
     },
     taskListItems: {
         width: '100%',
-        padding: 10
+        padding: 10,
+        flexDirection: 'column'
     }
 });
 
@@ -39,6 +41,10 @@ const buttons = StyleSheet.create({
         paddingHorizontal: 10,
 
     }
-})
+});
 
-export { styles, buttons }
+const text =  StyleSheet.create({
+
+});
+
+export { styles, buttons, text }
