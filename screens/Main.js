@@ -24,7 +24,6 @@ export default function Main({ navigation }) {
     async function fetch() {
       let n = await fetchUser()
       await setUserObject(n)
-      console.log("user: ", userObject)
     }
     fetch()
   }, [])

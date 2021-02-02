@@ -11,7 +11,7 @@ export function ListItems({ item, navigation }) {
                     styles.listItems,
                     {
                         backgroundColor: pressed
-                        ? '#ffb957' : 'white'
+                        ? 'rgba(255, 185, 87, 0.4)' : 'white'
                     }
                     ]}
                 onPress={() => {

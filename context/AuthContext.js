@@ -23,7 +23,6 @@ export default function AuthContextProvider({ children }) {
     }
 
     async function fetchListOfTasks(uid) {
-        console.log("inside async fetch")
         let taskListItem = { id: "", name: "", tasks: [{ taskId: "", description: "", expiryDate: "", isFinished: false }] }
         let tempTaskList = []
         
@@ -46,16 +45,13 @@ export default function AuthContextProvider({ children }) {
           taskItem = task
           let dbTasks = await db.collection('users').doc(uid).collection('taskLists').doc(task.id).collection('tasks').get()
           dbTasks.forEach(function(doc) {
-            console.log("for each in fetchTasks: ", doc.id, " => ", doc.data())
             taskItemInfo = doc.data()
             taskItemInfo.taskId = doc.id
             taskItemInfoList.push(taskItemInfo)
           })
           taskItem.tasks = taskItemInfoList
-          console.log("Tasklist: ", taskItem)
           returnList.push(taskItem)
         })
-        console.log("Returning List: ", returnList)
         return returnList
       }
     
