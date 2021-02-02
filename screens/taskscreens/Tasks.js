@@ -5,13 +5,13 @@ import { AuthContext } from '../../context/AuthContext';
 import { styles, buttons } from '../../styles/styles';
 
 export default function Tasks({ navigation }) {
-  const { user } = useContext(AuthContext)
+  const { user, tasksData } = useContext(AuthContext)
 
   return (
     <View style={styles.container}>
         <Text style={{ fontSize: 36, fontWeight: 'bold' }}>Tasks</Text>
-        <FlatList>
-          
+        <FlatList style={{ padding: 10 }}>
+
         </FlatList>
     </View>       
   );

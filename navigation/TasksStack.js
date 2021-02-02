@@ -14,57 +14,39 @@ const TaskStack = createStackNavigator();
 const taskListName = "Default Tasklist"
 
 export default function TasksStack() {
-  const { user } = useContext(AuthContext)
+  const { user, fetchTaskList } = useContext(AuthContext)
   const [data, setData] = useState([])
   const userTaskDb = db.collection('users').doc(user.uid).collection('taskLists')
 
   useEffect(() => {
     console.log("useEffect triggered in TaskStack")
-    async function loadData() {
-      let tempItems = await fetchTaskList()
-      let items = await fetchTasks(tempItems)
-      setData(items)
-    }
-    loadData()
+
+    // async function loadData() {
+    //   let tempItems = await fetchTaskList()
+    //   let items = await fetchTasks(tempItems)
+    //   setData(items)
+    // }
+    // loadData()
   }, [])
 
   async function fetchTaskList() {
     console.log("inside async fetch")
-    let taskItemInfo = { description: "", expiryDate: "", isFinished: false }
     let taskItem = { id: "", name: "", tasks: [{ taskId: "", description: "", expiryDate: "", isFinished: false }] }
     let tempTaskList = []
-    let taskList = []
     
     let taskDoc = await userTaskDb.get()
     taskDoc.forEach(function(doc) {
-      // taskItem.name = doc.data()
       taskItem = doc.data()
       taskItem.id = doc.id
-      // let dbTasks = db.collection('users').doc(user.uid).collection('taskLists').doc(doc.id).collection('tasks').get()
-      // dbTasks.forEach(function(doc) {
-      //   console.log(doc.id, " => ", doc.data())
-      //   taskItem = doc.data()
-      // })
       tempTaskList.push(taskItem)
     })
-    
-    //taskList = await fetchTasks(tempTaskList)
-    
-    // tempTaskList.forEach(function(task) {
-    //   let dbTasks = await db.collection('users').doc(user.uid).collection('taskLists').doc(task.id).collection('tasks').get()
-    //   dbTasks.forEach(function(doc) {
-    //     console.log(doc.id, " => ", doc.data())
-    //     taskItem = doc.data()
-    //   })
-    // }) 
-    
-    return tempTaskList
+     return tempTaskList
   }
 
   async function fetchTasks(list) {
-    let taskItemInfo = { description: "", expiryDate: "", isFinished: false }
-    //let taskItem = { id: "", name: "", tasks: [{ taskId: "", description: "", expiryDate: "", isFinished: false }] }
-    let returnList = []
+    let taskItemInfo = { taskId: "", description: "", expiryDate: "", isFinished: false }
+    let taskItemInfoList = []
+    let taskItem = { id: "", name: "", tasks: [{ taskId: "", description: "", expiryDate: "", isFinished: false }] }
 
     list.forEach(async function(task) {
       taskItem = task
@@ -72,13 +54,13 @@ export default function TasksStack() {
       dbTasks.forEach(function(doc) {
         console.log("for each in fetchTasks: ", doc.id, " => ", doc.data())
         taskItemInfo = doc.data()
-        taskItem.tasks = taskItemInfo
-        taskItem.tasks.id = doc.id
-        returnList.push(taskItem)
+        taskItemInfo.taskId = doc.id
+        taskItemInfoList.push(taskItemInfo)
       })
-      console.log("Tasklist: ", returnList)
+      taskItem.tasks = taskItemInfoList
+      console.log("Tasklist: ", taskItem)
     })
-    return returnList
+    return taskItem
   }
 
   return (
