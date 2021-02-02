@@ -32,29 +32,40 @@ export default function AuthContextProvider({ children }) {
           taskListItem.id = doc.id
           tempTaskList.push(taskListItem)
         })
-         return tempTaskList
-      }
+        console.log("list of tasks: ", tempTaskList)
+        return tempTaskList
+    }
     
-      async function fetchTasks(uid, list) {
-        let taskItemInfo = { taskId: "", description: "", expiryDate: "", isFinished: false }
-        let taskItemInfoList = []
-        let taskItem = { id: "", name: "", tasks: [{ taskId: "", description: "", expiryDate: "", isFinished: false }] }
-        let returnList = []
-    
-        list.forEach(async function(task) {
-          taskItem = task
-          let dbTasks = await db.collection('users').doc(uid).collection('taskLists').doc(task.id).collection('tasks').get()
-          dbTasks.forEach(function(doc) {
+    async function fetchTasks(uid, list) {
+    let taskItemInfo = { taskId: "", description: "", expiryDate: "", isFinished: false }
+    let taskItemInfoList = []
+    let taskItem = { id: "", name: "", tasks: [{ taskId: "", description: "", expiryDate: "", isFinished: false }] }
+    let returnList = []
+
+    list.forEach(async function(task) {
+        taskItem = task
+        console.log("inside task fetching, current task: ", taskItem)
+        let dbTasks = await db.collection('users').doc(uid).collection('taskLists').doc(task.id).collection('tasks').get()
+        dbTasks.forEach(function(doc) {
             taskItemInfo = doc.data()
             taskItemInfo.taskId = doc.id
             taskItemInfoList.push(taskItemInfo)
-          })
-          taskItem.tasks = taskItemInfoList
-          returnList.push(taskItem)
+            console.log("taskiteminfolist: ", taskItemInfoList)
         })
-        return returnList
-      }
-    
+        taskItem.tasks = taskItemInfoList
+        console.log("Returnlist: ", returnList)
+        returnList.push(taskItem)
+    })
+    console.log("When tasks fetched: ", returnList)
+    return returnList
+    }
+
+    async function createList(listName) {
+        await db.collection('users').doc(user.uid).collection('taskLists').add({ name: listName })
+        .then(() => {
+            console.log("New List", listName, "created.")
+        })
+    }
 
     const logIn = async (email, password) => {
         console.log("calling log in")
@@ -97,8 +108,17 @@ export default function AuthContextProvider({ children }) {
         }
     }
 
+    const createNewList = async (name) => {
+        try {
+            await createList(name)
+            fetchTasksList(user.uid)
+        } catch (error) {
+            console.log("error: ", error)
+        }
+    }
+
     return (
-        <AuthContext.Provider value={{ isLoading, user, tasksData, logIn, signOut, signUp, fetchTasksList }}>
+        <AuthContext.Provider value={{ isLoading, user, tasksData, logIn, signOut, signUp, fetchTasksList, createNewList }}>
             {children}
         </AuthContext.Provider>
     );

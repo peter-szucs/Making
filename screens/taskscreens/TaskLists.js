@@ -7,6 +7,7 @@ import { TaskListItems } from '../../listcomponents/TaskListItems';
 import { Ionicons } from '@expo/vector-icons';
 
 const NewListModal = ({ visible, updateVisibility }) => {
+  const { createNewList } = useContext(AuthContext)
   const [newListName, setNewListName] = useState("My new List")
   
   return (
@@ -35,6 +36,7 @@ const NewListModal = ({ visible, updateVisibility }) => {
             <Button title="Done" onPress={() => {
               updateVisibility(false)
               // Upload new list to DB
+              createNewList(newListName)
             }} />
           </View>
         </View>
