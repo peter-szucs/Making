@@ -16,6 +16,14 @@ const styles = StyleSheet.create({
         padding: 10,
         width: 200
     },
+    listItems: {
+        width: '100%',
+        padding: 10
+    },
+    taskListItems: {
+        width: '100%',
+        padding: 10
+    }
 });
 
 const buttons = StyleSheet.create({
@@ -25,6 +33,11 @@ const buttons = StyleSheet.create({
         padding: 10,
         borderRadius: 10,
         width: 160
+    },
+    addIcon: {
+        alignItems: 'center',
+        paddingHorizontal: 10,
+
     }
 })
 
