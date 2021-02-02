@@ -32,7 +32,6 @@ export default function AuthContextProvider({ children }) {
           taskListItem.id = doc.id
           tempTaskList.push(taskListItem)
         })
-        console.log("list of tasks: ", tempTaskList)
         return tempTaskList
     }
     
@@ -47,15 +46,12 @@ export default function AuthContextProvider({ children }) {
         taskItem = task
         let dbTasks = await db.collection('users').doc(uid).collection('taskLists').doc(task.id).collection('tasks').get()
         dbTasks.forEach(function(doc) {
-            console.log("inside task fetching, current task: ", taskItem)
             taskItemInfo = doc.data()
             taskItemInfo.taskId = doc.id
             taskItemInfoList.push(taskItemInfo)
-            console.log("taskiteminfolist: ", taskItemInfoList)
         })
         taskItem.tasks = taskItemInfoList
         returnList.push(taskItem)
-        console.log("Returnlist: ", returnList)
     })
     return returnList
     }
@@ -100,9 +96,11 @@ export default function AuthContextProvider({ children }) {
 
     const fetchTasksList = async (uid) => {
         try {
+            console.log("Fetch started")
             let tempListOfTasks = await fetchListOfTasks(uid)
             let fetchedTaskData = await fetchTasks(uid, tempListOfTasks)
             setTasksData(fetchedTaskData)
+            console.log("Fetch done")
         } catch (error) {
             console.log("error: ", error)
         }
@@ -117,8 +115,17 @@ export default function AuthContextProvider({ children }) {
         }
     }
 
+    const deleteList = async (id) => {
+        try {
+            await db.collection('users').doc(user.uid).collection('taskLists').doc(id).delete()
+            fetchTasksList(user.uid)
+        } catch (error) {
+            console.log("error: ", error)
+        }
+    }
+
     return (
-        <AuthContext.Provider value={{ isLoading, user, tasksData, logIn, signOut, signUp, fetchTasksList, createNewList }}>
+        <AuthContext.Provider value={{ isLoading, user, tasksData, logIn, signOut, signUp, fetchTasksList, createNewList, deleteList }}>
             {children}
         </AuthContext.Provider>
     );

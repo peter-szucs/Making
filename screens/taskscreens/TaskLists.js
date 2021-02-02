@@ -1,10 +1,11 @@
-import React, { useContext, useLayoutEffect, useState } from 'react';
+import React, { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import { Button, Text, View, Modal, TextInput } from 'react-native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { AuthContext } from '../../context/AuthContext';
 import { styles, buttons } from '../../styles/styles';
 import { TaskListItems } from '../../listcomponents/TaskListItems';
 import { Ionicons } from '@expo/vector-icons';
+import { useIsFocused } from '@react-navigation/native';
 
 const NewListModal = ({ visible, updateVisibility }) => {
   const { createNewList } = useContext(AuthContext)
@@ -33,10 +34,10 @@ const NewListModal = ({ visible, updateVisibility }) => {
             onChangeText={(text) => setNewListName(text)} />
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10 }}>
             <Button title="Cancel" onPress={() => updateVisibility(false)} />
-            <Button title="Done" onPress={() => {
-              updateVisibility(false)
+            <Button title="Done" onPress={async () => {
               // Upload new list to DB
-              createNewList(newListName)
+              await createNewList(newListName)
+              updateVisibility(false)
             }} />
           </View>
         </View>
@@ -48,6 +49,7 @@ const NewListModal = ({ visible, updateVisibility }) => {
 export default function TasksLists({ navigation }) {
   const { user, tasksData } = useContext(AuthContext)
   const [isVisible, setIsVisible] = useState(false)
+  const [willRefresh, setWillRefresh] = useState(false)
   
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -64,17 +66,29 @@ export default function TasksLists({ navigation }) {
     })
   }, [navigation])
 
+  const toggleRefresh = () => setWillRefresh(!willRefresh)
+
+  useEffect(() => {
+    console.log("TasksData useEffect")
+    toggleRefresh
+  }, [tasksData])
+
+  useIsFocused();
+
   return (
     <View style={styles.container}>
         <FlatList 
           style={{ backgroundColor:'#f2f2f2', padding: 10, width: '100%' }}
           data={tasksData}
+          extraData={willRefresh}
           renderItem={({ item, index }) => 
             <TaskListItems
               item ={item} 
               navigation={navigation} />
           }
-          keyExtractor={( item, index ) => index.toString()} />
+          //refreshing={willRefresh}
+          //keyExtractor={( item, index ) => item.id.toString()} 
+        />
         <NewListModal visible={isVisible} updateVisibility={setIsVisible} />
 
     </View>       

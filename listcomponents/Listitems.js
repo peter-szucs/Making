@@ -3,6 +3,7 @@ import { Pressable, Text, View } from "react-native";
 import { styles, text } from "../styles/styles";
 
 export function ListItems({ item, navigation }) {
+
     console.log("Item in component: ", item)
     return (
         <View style={styles.listItemContainer}>
