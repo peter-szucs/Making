@@ -38,6 +38,7 @@ const NewListModal = ({ visible, updateVisibility }) => {
               // Upload new list to DB
               await createNewList(newListName)
               updateVisibility(false)
+              setNewListName("My new List")
             }} />
           </View>
         </View>
@@ -70,7 +71,7 @@ export default function TasksLists({ navigation }) {
 
   useEffect(() => {
     console.log("TasksData useEffect")
-    toggleRefresh
+    toggleRefresh()
   }, [tasksData])
 
   useIsFocused();
