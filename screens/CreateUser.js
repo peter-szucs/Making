@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 import { Image, Text, View } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { useState } from 'react/cjs/react.development';
-import { AuthContext } from '../context/AuthContext';
+import { Context } from '../context/Context';
 import { styles, buttons } from '../styles/styles';
 
 export default function CreateUser() {
@@ -12,7 +12,7 @@ export default function CreateUser() {
     const [password, setPassword] = useState("")
     let logo = require('../assets/Logo.png')
 
-    const { signUp } = useContext(AuthContext)
+    const { signUp } = useContext(Context)
 
     const submitSignUp = () => {
         // Do userinput checking here

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Button, Text, View } from 'react-native';
-import { AuthContext } from '../../context/AuthContext';
+import { Context } from '../../context/Context';
 import { styles, buttons } from '../../styles/styles';
 
 export default function TaskInfo({ navigation }) {

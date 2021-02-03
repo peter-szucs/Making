@@ -1,11 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useContext } from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
-import { AuthContext } from '../context/AuthContext';
+import { Context } from '../context/Context';
 import { styles, buttons } from '../styles/styles';
 
 export default function Settings({ navigation }) {
-    const { user, signOut } = useContext(AuthContext)
+    const { user, signOut } = useContext(Context)
 
     return (
         <View style={{...styles.container, justifyContent: 'center'}}>

@@ -2,9 +2,9 @@ import React, { createContext, useState } from "react";
 import { useEffect } from "react";
 import { auth, db } from '../firebase';
 
-export const AuthContext = createContext();
+export const Context = createContext();
 
-export default function AuthContextProvider({ children }) {
+export default function ContextProvider({ children }) {
     const [user, setUser] = useState();
     const [tasksData, setTasksData] = useState();
     const [isLoading, setIsLoading] = useState(true);
@@ -125,8 +125,8 @@ export default function AuthContextProvider({ children }) {
     }
 
     return (
-        <AuthContext.Provider value={{ isLoading, user, tasksData, logIn, signOut, signUp, fetchTasksList, createNewList, deleteList }}>
+        <Context.Provider value={{ isLoading, user, tasksData, logIn, signOut, signUp, fetchTasksList, createNewList, deleteList }}>
             {children}
-        </AuthContext.Provider>
+        </Context.Provider>
     );
 }

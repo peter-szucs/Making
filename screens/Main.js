@@ -1,14 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useContext } from 'react';
 import { Button, Image, StyleSheet, Text, View } from 'react-native';
-import { AuthContext } from '../context/AuthContext';
+import { Context } from '../context/Context';
 import { styles, buttons } from '../styles/styles';
 import { db } from '../firebase';
 import { useEffect, useState } from 'react/cjs/react.development';
 import { TextInput } from 'react-native-gesture-handler';
 
 export default function Main({ navigation }) {
-  const { user } = useContext(AuthContext)
+  const { user } = useContext(Context)
   const [userObject, setUserObject] = useState({userName: "", totalPoints: 0})
   let logo = require('../assets/Logo.png')
 

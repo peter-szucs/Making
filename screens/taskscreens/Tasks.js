@@ -1,12 +1,12 @@
 import React, { useContext, useEffect } from 'react';
 import { Button, Text, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
-import { AuthContext } from '../../context/AuthContext';
+import { Context } from '../../context/Context';
 import { ListItems } from '../../listcomponents/Listitems';
 import { styles, buttons } from '../../styles/styles';
 
 export default function Tasks({ navigation, route }) {
-  const { user } = useContext(AuthContext)
+  const { user } = useContext(Context)
   console.log("route item: ", route.params.item)
 
   useEffect(() => {

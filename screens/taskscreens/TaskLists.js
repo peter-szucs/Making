@@ -1,14 +1,14 @@
 import React, { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import { Button, Text, View, Modal, TextInput } from 'react-native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
-import { AuthContext } from '../../context/AuthContext';
+import { Context } from '../../context/Context';
 import { styles, buttons } from '../../styles/styles';
 import { TaskListItems } from '../../listcomponents/TaskListItems';
 import { Ionicons } from '@expo/vector-icons';
 import { useIsFocused } from '@react-navigation/native';
 
 const NewListModal = ({ visible, updateVisibility }) => {
-  const { createNewList } = useContext(AuthContext)
+  const { createNewList } = useContext(Context)
   const [newListName, setNewListName] = useState("My new List")
   
   return (
@@ -47,7 +47,7 @@ const NewListModal = ({ visible, updateVisibility }) => {
 }
 
 export default function TasksLists({ navigation }) {
-  const { user, tasksData } = useContext(AuthContext)
+  const { user, tasksData } = useContext(Context)
   const [isVisible, setIsVisible] = useState(false)
   const [willRefresh, setWillRefresh] = useState(false)
   

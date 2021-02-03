@@ -1,11 +1,11 @@
 import React from "react";
 import { Pressable, Text, View } from "react-native";
 import { useContext } from "react/cjs/react.development";
-import { AuthContext } from "../context/AuthContext";
+import { Context } from "../context/Context";
 import { styles, text } from "../styles/styles";
 
 export function TaskListItems({ item, navigation }) {
-    const { deleteList } = useContext(AuthContext)
+    const { deleteList } = useContext(Context)
     return (
         <View style={styles.listItemContainer}>
             <Pressable

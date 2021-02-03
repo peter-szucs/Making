@@ -1,6 +1,6 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React, { useContext, useState } from 'react';
-import { AuthContext } from '../context/AuthContext';
+import { Context } from '../context/Context';
 import TaskInfo from '../screens/taskscreens/TaskInfo';
 import Tasks from '../screens/taskscreens/Tasks';
 import TasksLists from '../screens/taskscreens/TaskLists';
@@ -8,7 +8,7 @@ import TasksLists from '../screens/taskscreens/TaskLists';
 const TaskStack = createStackNavigator();
 
 export default function TasksStack() {
-  const { user, tasksData, fetchTasksList } = useContext(AuthContext)
+  const { user, tasksData, fetchTasksList } = useContext(Context)
   
    return (
     <TaskStack.Navigator initialRouteName="Task Lists">

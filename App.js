@@ -1,13 +1,13 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import AuthContextProvider from './context/AuthContext';
+import ContextProvider from './context/Context';
 import Navigation from './navigation/Navigation';
 
 export default function App() {
   return (
-    <AuthContextProvider>
+    <ContextProvider>
       <Navigation />
-    </AuthContextProvider>
+    </ContextProvider>
   );
 }
 

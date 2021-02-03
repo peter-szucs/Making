@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useContext, useState } from 'react';
 import { Button, Image, Text, View } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
-import { AuthContext } from '../context/AuthContext';
+import { Context } from '../context/Context';
 import { styles, buttons } from '../styles/styles';
 
 export default function Login({ navigation }) {
@@ -10,7 +10,7 @@ export default function Login({ navigation }) {
     const [password, setPassword] = useState("")
     let logo = require('../assets/Logo.png')
 
-    const { setIsCreatingUser, logIn } = useContext(AuthContext)
+    const { setIsCreatingUser, logIn } = useContext(Context)
 
     const submitLogin = () => {
         console.log("Logging in")
