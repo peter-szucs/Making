@@ -29,21 +29,13 @@ export default function TasksLists({ navigation }) {
     })
   }, [navigation])
 
-  const toggleRefresh = () => setWillRefresh(!willRefresh)
-
-  useEffect(() => {
-    console.log("TasksData useEffect")
-    toggleRefresh()
-  }, [tasksData])
-
-  useIsFocused();
+    // useIsFocused();
 
   return (
     <View style={styles.container}>
         <FlatList 
           style={{ backgroundColor:'#f2f2f2', padding: 10, width: '100%' }}
           data={tasksData}
-          extraData={willRefresh}
           renderItem={({ item, index }) => 
             <TaskListItems
               item ={item} 

@@ -1,8 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { styles, text } from "../styles/styles";
 
 export function ListItems({ item, navigation }) {
+    const [expiryText, setExpiryText] = useState("")
+
+    function checkIfDone(isDone) {
+        if (isDone) {
+            return "Done"
+        } else {
+            return "Expires: ", item.expiryDate
+        }
+    }
 
     return (
         <View style={styles.listItemContainer}>
@@ -26,7 +35,7 @@ export function ListItems({ item, navigation }) {
                     console.log("Long press")
                 }}>
                 <Text style={text.listTitleMedium}>{item.description}</Text>
-                <Text style={{  }}>Expires: {item.expiryDate}</Text>
+                <Text style={{  }}>{checkIfDone(item.isFinished)}</Text>
             </Pressable>
         </View>
         

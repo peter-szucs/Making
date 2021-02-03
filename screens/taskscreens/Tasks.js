@@ -8,16 +8,22 @@ import { Ionicons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 export default function Tasks({ navigation, route }) {
-  const { user } = useContext(Context)
+  const { tasksData } = useContext(Context)
   const [isVisible, setIsVisible] = useState(false)
   const [listData, setListData] = useState(route.params.item)
   //console.log("route item: ", route.params.item)
   
   useEffect(() => {
+    console.log("onMount")
     navigation.setOptions({ title: route.params.item.name })
-    sortList(route.params.item)
-    checkTimePassed(route.params.item.tasks[0])
-  }, [])
+    // sortList(route.params.item)
+    // getDataFromState()
+   }, [])
+
+  useEffect(() => {
+    console.log("onTasksDataChanged")
+    getDataFromState()
+  }, [tasksData])
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -34,15 +40,24 @@ export default function Tasks({ navigation, route }) {
     })
   }, [navigation])
 
+  function getDataFromState() {
+    let listToSet = {}
+    for (const list of tasksData) {
+      if (list.id === route.params.item.id) {
+        let listToSort = list
+        listToSet = sortList(listToSort)
+      }
+    }
+    setListData(listToSet)
+  }
+
   function sortList(list) {
-    console.log("unsorted: ", list)
     let sortedByFinishList = list.tasks.sort(function(x, y) {
       return (x.isFinished === y.isFinished)? 0 : x.isFinished? 1 : -1
     })
-    console.log("bool sort: ", sortedByFinishList)
     // let sortedList = sortedByFinishList.tasks.sort((a, b) => a.expiryDate.localeCompare(b.expiryDate))
-    let sortedList = sortedByFinishList.sort((a, b) => a.expiryDate.split('-').reverse().join().localeCompare(b.expiryDate.split('-').reverse().join()))
-    console.log("sorted list: ", sortedList)
+    // let sortedList = sortedByFinishList.sort((a, b) => a.expiryDate.split('-').reverse().join().localeCompare(b.expiryDate.split('-').reverse().join()))
+    return sortedByFinishList
   }
 
   //
@@ -67,8 +82,7 @@ export default function Tasks({ navigation, route }) {
     console.log("Task:", item.description, "expires: ", item.expiryDate)
     console.log("Date now: ", currentDate)
     if (!item.isFinished) {
-      if (item.expiryDate() > currentDate
-      ()) {
+      if (item.expiryDate < currentDate) {
         console.log("Expired")
       } else {
         console.log("still valid")
@@ -83,22 +97,22 @@ export default function Tasks({ navigation, route }) {
     <View style={styles.container}>
         <FlatList 
           style={{ backgroundColor:'#f2f2f2', width: '100%', height: 200 }}
-          data={route.params.item.tasks}
+          data={listData}
           renderItem={({ item, index }) => 
             <ListItems
               item={item}
               navigation={navigation} />
           }
           keyExtractor={( item, index ) => index.toString()} />
-        <NewTaskModal visible={isVisible} updateVisibility={setIsVisible} />
+        <NewTaskModal visible={isVisible} updateVisibility={setIsVisible} listId={route.params.item.id} />
     </View>  
         
   );
 }
 
-const NewTaskModal = ({ visible, updateVisibility }) => {
-  const { createNewList } = useContext(Context)
-  const [newTaskName, setNewTaskName] = useState("My new List")
+const NewTaskModal = ({ visible, updateVisibility, listId }) => {
+  const { addTask } = useContext(Context)
+  const [newTaskName, setNewTaskName] = useState("New Task")
   const [date, setDate] = useState(new Date())
   const [show, setShow] = useState(false)
 
@@ -160,9 +174,12 @@ const NewTaskModal = ({ visible, updateVisibility }) => {
               let convertedDate = getParsedDate(date)
               console.log(convertedDate)
               // Upload new task to DB
-              // await addNewTask(taskId, newTaskName)
-              // updateVisibility(false)
-              // setNewTaskName("My new List")
+              let taskToUpload = { description: newTaskName, expiryDate: convertedDate, isFinished: false }
+              console.log("Task to upload is: ", taskToUpload)
+              await addTask(listId, taskToUpload)
+              updateVisibility(false)
+              setNewTaskName("New Task")
+              setDate(new Date())
             }} />
           </View>
         </View>

@@ -18,10 +18,6 @@ export default function ContextProvider({ children }) {
         return unsubscribe;
     })
 
-    useEffect(() => {
-        console.log("TasksData on update of state: ", tasksData)
-    }, [tasksData])
-
     async function createDatabase(uid, name) {
         await db.collection('users').doc(uid).set({ userName: name, totalPoints: 0 })
     }
@@ -36,7 +32,7 @@ export default function ContextProvider({ children }) {
           taskListItem.id = doc.id
           tempTaskList.push(taskListItem)
         })
-        console.log("TempTaskList before return: ", tempTaskList)
+        
         return tempTaskList
     }
     
@@ -44,23 +40,20 @@ export default function ContextProvider({ children }) {
     
         let returnList = []
 
-        await list.forEach(async function(task) {
-            let taskItemInfo = { taskId: "", description: "", expiryDate: "", isFinished: false }
+        for (const task of list) {
+            //let taskItemInfo = { taskId: "", description: "", expiryDate: "", isFinished: false }
             let taskItemInfoList = []
-            let taskItem = { id: "", name: "", tasks: [{ taskId: "", description: "", expiryDate: "", isFinished: false }] }
-            taskItem = task
+            //let taskItem = { id: "", name: "", tasks: [{ taskId: "", description: "", expiryDate: "", isFinished: false }] }
+            let taskItem = task
             let dbTasks = await db.collection('users').doc(uid).collection('taskLists').doc(task.id).collection('tasks').get()
             dbTasks.forEach(function(doc) {
-                taskItemInfo = doc.data()
+                let taskItemInfo = doc.data()
                 taskItemInfo.taskId = doc.id
                 taskItemInfoList.push(taskItemInfo)
             })
             taskItem.tasks = taskItemInfoList
             returnList.push(taskItem)
-            console.log("after push: ", returnList)
-            //return returnList
-        })
-        console.log("before return: ", returnList)
+        }
         return returnList
     }
 
@@ -132,8 +125,17 @@ export default function ContextProvider({ children }) {
         }
     }
 
+    const addTask = async (id, data) => {
+        try {
+            await db.collection('users').doc(user.uid).collection('taskLists').doc(id).collection('tasks').add(data)
+            fetchTasksList(user.uid)
+        } catch (error) {
+            console.log("error: ", error)
+        }
+    }
+
     return (
-        <Context.Provider value={{ isLoading, user, tasksData, logIn, signOut, signUp, fetchTasksList, createNewList, deleteList }}>
+        <Context.Provider value={{ isLoading, user, tasksData, logIn, signOut, signUp, fetchTasksList, createNewList, deleteList, addTask }}>
             {children}
         </Context.Provider>
     );
