@@ -6,7 +6,7 @@ export const Context = createContext();
 
 export default function ContextProvider({ children }) {
     const [user, setUser] = useState();
-    const [tasksData, setTasksData] = useState();
+    const [tasksData, setTasksData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -17,6 +17,10 @@ export default function ContextProvider({ children }) {
         })
         return unsubscribe;
     })
+
+    useEffect(() => {
+        console.log("TasksData on update of state: ", tasksData)
+    }, [tasksData])
 
     async function createDatabase(uid, name) {
         await db.collection('users').doc(uid).set({ userName: name, totalPoints: 0 })
@@ -32,28 +36,32 @@ export default function ContextProvider({ children }) {
           taskListItem.id = doc.id
           tempTaskList.push(taskListItem)
         })
+        console.log("TempTaskList before return: ", tempTaskList)
         return tempTaskList
     }
     
     async function fetchTasks(uid, list) {
     
-    let returnList = []
+        let returnList = []
 
-    list.forEach(async function(task) {
-        let taskItemInfo = { taskId: "", description: "", expiryDate: "", isFinished: false }
-        let taskItemInfoList = []
-        let taskItem = { id: "", name: "", tasks: [{ taskId: "", description: "", expiryDate: "", isFinished: false }] }
-        taskItem = task
-        let dbTasks = await db.collection('users').doc(uid).collection('taskLists').doc(task.id).collection('tasks').get()
-        dbTasks.forEach(function(doc) {
-            taskItemInfo = doc.data()
-            taskItemInfo.taskId = doc.id
-            taskItemInfoList.push(taskItemInfo)
+        await list.forEach(async function(task) {
+            let taskItemInfo = { taskId: "", description: "", expiryDate: "", isFinished: false }
+            let taskItemInfoList = []
+            let taskItem = { id: "", name: "", tasks: [{ taskId: "", description: "", expiryDate: "", isFinished: false }] }
+            taskItem = task
+            let dbTasks = await db.collection('users').doc(uid).collection('taskLists').doc(task.id).collection('tasks').get()
+            dbTasks.forEach(function(doc) {
+                taskItemInfo = doc.data()
+                taskItemInfo.taskId = doc.id
+                taskItemInfoList.push(taskItemInfo)
+            })
+            taskItem.tasks = taskItemInfoList
+            returnList.push(taskItem)
+            console.log("after push: ", returnList)
+            //return returnList
         })
-        taskItem.tasks = taskItemInfoList
-        returnList.push(taskItem)
-    })
-    return returnList
+        console.log("before return: ", returnList)
+        return returnList
     }
 
     async function createList(listName) {

@@ -7,45 +7,7 @@ import { TaskListItems } from '../../listcomponents/TaskListItems';
 import { Ionicons } from '@expo/vector-icons';
 import { useIsFocused } from '@react-navigation/native';
 
-const NewListModal = ({ visible, updateVisibility }) => {
-  const { createNewList } = useContext(Context)
-  const [newListName, setNewListName] = useState("My new List")
-  
-  return (
-    <Modal visible={visible} transparent={true}>
-      <View style={{ 
-        backgroundColor: 'rgba(1, 1, 1, 0.4)',
-        width: '100%',
-        height: '100%',
-        justifyContent: 'center',
-        alignItems: 'center' 
-      }} >
-        <View style={{ 
-          backgroundColor: 'white',
-          justifyContent: 'space-around',
-          alignItems: 'center',
-          borderRadius: 5,
-          width: '60%'
-        }} >
-          <Text style={{ padding: 10, fontSize: 18 }}>{newListName}</Text>
-          <TextInput
-            style={{ width: '80%', padding: 10, backgroundColor: '#ddd' }}
-            placeholder="Enter name of list"
-            onChangeText={(text) => setNewListName(text)} />
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10 }}>
-            <Button title="Cancel" onPress={() => updateVisibility(false)} />
-            <Button title="Done" onPress={async () => {
-              // Upload new list to DB
-              await createNewList(newListName)
-              updateVisibility(false)
-              setNewListName("My new List")
-            }} />
-          </View>
-        </View>
-      </View>
-    </Modal>
-  );
-}
+
 
 export default function TasksLists({ navigation }) {
   const { user, tasksData } = useContext(Context)
@@ -93,5 +55,45 @@ export default function TasksLists({ navigation }) {
         <NewListModal visible={isVisible} updateVisibility={setIsVisible} />
 
     </View>       
+  );
+}
+
+const NewListModal = ({ visible, updateVisibility }) => {
+  const { createNewList } = useContext(Context)
+  const [newListName, setNewListName] = useState("My new List")
+  
+  return (
+    <Modal visible={visible} transparent={true}>
+      <View style={{ 
+        backgroundColor: 'rgba(1, 1, 1, 0.4)',
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center' 
+      }} >
+        <View style={{ 
+          backgroundColor: 'white',
+          justifyContent: 'space-around',
+          alignItems: 'center',
+          borderRadius: 10,
+          width: '70%'
+        }} >
+          <Text style={{ padding: 20, fontSize: 18 }}>{newListName}</Text>
+          <TextInput
+            style={{ width: '80%', padding: 10, backgroundColor: '#eee' }}
+            placeholder="Enter name of list"
+            onChangeText={(text) => setNewListName(text)} />
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, paddingTop: 10, paddingBottom: 20 }}>
+            <Button title="Cancel" onPress={() => updateVisibility(false)} />
+            <Button title="Done" onPress={async () => {
+              // Upload new list to DB
+              await createNewList(newListName)
+              updateVisibility(false)
+              setNewListName("My new List")
+            }} />
+          </View>
+        </View>
+      </View>
+    </Modal>
   );
 }
