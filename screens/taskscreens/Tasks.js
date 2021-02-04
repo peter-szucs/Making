@@ -101,7 +101,8 @@ export default function Tasks({ navigation, route }) {
           renderItem={({ item, index }) => 
             <ListItems
               item={item}
-              navigation={navigation} />
+              navigation={navigation}
+              listId={route.params.item.id} />
           }
           keyExtractor={( item, index ) => index.toString()} />
         <NewTaskModal visible={isVisible} updateVisibility={setIsVisible} listId={route.params.item.id} />
@@ -111,7 +112,7 @@ export default function Tasks({ navigation, route }) {
 }
 
 const NewTaskModal = ({ visible, updateVisibility, listId }) => {
-  const { addTask } = useContext(Context)
+  const { addOrDeleteOrUpdateTask } = useContext(Context)
   const [newTaskName, setNewTaskName] = useState("New Task")
   const [date, setDate] = useState(new Date())
   const [show, setShow] = useState(false)
@@ -176,7 +177,7 @@ const NewTaskModal = ({ visible, updateVisibility, listId }) => {
               // Upload new task to DB
               let taskToUpload = { description: newTaskName, expiryDate: convertedDate, isFinished: false }
               console.log("Task to upload is: ", taskToUpload)
-              await addTask(listId, taskToUpload)
+              await addOrDeleteOrUpdateTask(listId, taskToUpload, "add")
               updateVisibility(false)
               setNewTaskName("New Task")
               setDate(new Date())

@@ -125,9 +125,27 @@ export default function ContextProvider({ children }) {
         }
     }
 
-    const addTask = async (id, data) => {
+    const addOrDeleteOrUpdateTask = async (id, data, action) => {
+        console.log("id: ", id, "data: ", data, "action: ", action)
         try {
-            await db.collection('users').doc(user.uid).collection('taskLists').doc(id).collection('tasks').add(data)
+            const dbRef = db.collection('users').doc(user.uid).collection('taskLists').doc(id.toString()).collection('tasks')
+            switch (action) {
+                case "add":
+                    await dbRef.add(data)
+                    console.log("Task added")
+                    break;
+                case "update":
+                    await dbRef.doc(data.taskId).update(data)
+                    console.log("Task updated")
+                    break;
+                case "delete":
+                    await dbRef.doc(data.taskId).delete()
+                    console.log("Task deleted")
+                    break;
+                default:
+                    console.log("Something went very wrong if you ended up here")
+                    break;
+            }
             fetchTasksList(user.uid)
         } catch (error) {
             console.log("error: ", error)
@@ -135,7 +153,7 @@ export default function ContextProvider({ children }) {
     }
 
     return (
-        <Context.Provider value={{ isLoading, user, tasksData, logIn, signOut, signUp, fetchTasksList, createNewList, deleteList, addTask }}>
+        <Context.Provider value={{ isLoading, user, tasksData, logIn, signOut, signUp, fetchTasksList, createNewList, deleteList, addOrDeleteOrUpdateTask }}>
             {children}
         </Context.Provider>
     );
