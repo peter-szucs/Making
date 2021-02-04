@@ -5,14 +5,10 @@ import { Context } from '../../context/Context';
 import { styles, buttons } from '../../styles/styles';
 import { TaskListItems } from '../../listcomponents/TaskListItems';
 import { Ionicons } from '@expo/vector-icons';
-import { useIsFocused } from '@react-navigation/native';
-
-
 
 export default function TasksLists({ navigation }) {
   const { user, tasksData } = useContext(Context)
   const [isVisible, setIsVisible] = useState(false)
-  const [willRefresh, setWillRefresh] = useState(false)
   
   useLayoutEffect(() => {
     navigation.setOptions({
