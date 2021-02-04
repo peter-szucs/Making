@@ -48,6 +48,7 @@ export default function Tasks({ navigation, route }) {
         listToSet = sortList(listToSort)
       }
     }
+    console.log("List data used in Tasks Flatlist: ", listToSet)
     setListData(listToSet)
   }
 

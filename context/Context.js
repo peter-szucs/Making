@@ -1,12 +1,14 @@
 import React, { createContext, useState } from "react";
 import { useEffect } from "react";
 import { auth, db } from '../firebase';
+import { isOverdue, isToday, isWithinDays } from "../functions";
 
 export const Context = createContext();
 
 export default function ContextProvider({ children }) {
     const [user, setUser] = useState();
     const [tasksData, setTasksData] = useState([]);
+    const [sectionListData, setSectionListData] = useState([])
     const [isLoading, setIsLoading] = useState(true);
     const [userObject, setUserObject] = useState({userName: "", totalPoints: 0, avatarPath: "", tasksCompleted: 0, tasksFailed: 0})
 
@@ -73,9 +75,45 @@ export default function ContextProvider({ children }) {
 
     function createSectionList(tasksList) {
         let returnList = []
+        let todayList = []
+        let tomorrowList = []
+        let upcomingList = []
         for (const taskList of tasksList) {
-            
+            for (const task of taskList.tasks) {
+                if (!isOverdue(task) && !task.isFinished && isWithinDays(task.expiryDate, 5)) {
+                    if (isToday(task.expiryDate)) {
+                        let itemToPush = { ...task, taskListId: taskList.id }
+                        // console.log("today item To push: ", itemToPush)
+                        todayList.push(itemToPush)
+                    } else if (isWithinDays(task.expiryDate, 1)) {
+                        let itemToPush = { ...task, taskListId: taskList.id }
+                        // console.log("tomorrow item To push: ", itemToPush)
+                        tomorrowList.push(itemToPush)
+                    } else {
+                        let itemToPush = { ...task, taskListId: taskList.id }
+                        // console.log("upcoming item To push: ", itemToPush)
+                        upcomingList.push(itemToPush) 
+                    }
+                }
+            }
         }
+        returnList = [{heading: "Today", items: todayList}, {heading: "Tomorrow", items: tomorrowList}, {heading: "Upcoming", items: upcomingList}]
+        // console.log("Returnlist: ", returnList)
+        return returnList
+    }
+
+    function createMainScreenList(tasksList) {
+        let returnList = []
+        for (const taskList of tasksList) {
+            for (const task of taskList.tasks) {
+                if (!isOverdue(task) && !task.isFinished && isWithinDays(task.expiryDate, 5)) {
+                    let itemToPush = { ...task, taskListId: taskList.id }
+                    // console.log("upcoming item To push: ", itemToPush)
+                    returnList.push(itemToPush) 
+                }
+            }
+        }
+        return returnList
     }
 
     const logIn = async (email, password) => {
@@ -120,8 +158,9 @@ export default function ContextProvider({ children }) {
             let tempListOfTasks = await fetchListOfTasks(uid)
             let fetchedTaskData = await fetchTasks(uid, tempListOfTasks)
             setTasksData(fetchedTaskData)
-            let sectionList = createSectionList(fetchedTaskData)
-            // set state
+            // let sectionList = createSectionList(fetchedTaskData)
+            let sectionList = createMainScreenList(fetchedTaskData)
+            setSectionListData(sectionList)
             console.log("Fetch done")
         } catch (error) {
             console.log("error: ", error)
@@ -174,7 +213,7 @@ export default function ContextProvider({ children }) {
     }
 
     return (
-        <Context.Provider value={{ isLoading, user, userObject, tasksData, logIn, signOut, signUp, fetchUser, fetchTasksList, createNewList, deleteList, addOrDeleteOrUpdateTask }}>
+        <Context.Provider value={{ isLoading, user, userObject, tasksData, sectionListData, logIn, signOut, signUp, fetchUser, fetchTasksList, createNewList, deleteList, addOrDeleteOrUpdateTask }}>
             {children}
         </Context.Provider>
     );

@@ -5,16 +5,13 @@ import { styles, text } from '../styles/styles';
 import { useEffect, useState } from 'react/cjs/react.development';
 import { isWithinDays } from '../functions';
 import { FlatList } from 'react-native-gesture-handler';
+import { ListItems } from '../listcomponents/Listitems';
 
 export default function Main({ navigation }) {
-  const { user, userObject, fetchUser, tasksData } = useContext(Context)
-  const [sectionList, setSectionList] = useState()
+  const { user, userObject, fetchUser, sectionListData } = useContext(Context)
 
   let logo = require('../assets/Logo.png')
   let topBarBackgroundPic = require('../assets/TopBarCut.png')
-
-  // let d = isWithinDays(new Date(), 5)
-  // console.log(d)
 
   const avatarPaths = [
     require('../assets/Avatar11.png'),
@@ -23,7 +20,6 @@ export default function Main({ navigation }) {
    
   useEffect(() => {
     fetchUser()
-
   }, [])
 
   useEffect(() => {
@@ -55,8 +51,18 @@ export default function Main({ navigation }) {
           <Text style={{fontSize: 12, alignSelf: 'center'}}>Health: 80/100</Text>
         </View>
       </ImageBackground>
-      <Text style={text.mainScreenListTitle}>Upcoming Tasks:</Text>
-      <SectionList />
+      <Text style={text.mainScreenListTitle}>Tasks within 5 days:</Text>
+      <FlatList
+        style={{ width: '90%' }}
+        data={sectionListData}
+        renderItem={({item}) => 
+          <ListItems item={item} listId={item.taskListId} />}
+        keyExtractor={(item) => item.taskId.toString()}  />
+      {/* <SectionList
+        sections={sectionListData}
+        renderItem={({item}) => <ListItems item={item} listId={item.taskListId} />} 
+        renderSectionHeader={({section: {heading}}) => <Text style={text.listTitleBig}>{heading}</Text>}
+        keyExtractor={(index) => index.toString()} /> */}
     </View>
   );
 }

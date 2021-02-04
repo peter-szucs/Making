@@ -49,9 +49,6 @@ export function ListItems({ item, navigation, listId }) {
                     ]}
                 //delayLongPress={1000}
                 onPress={() => {
-                    // isFinished toggle
-                    // change backgroundcolor to "finished state"
-                    // ideally, move all finished tasks down
                     if (!item.isFinished) {
                         item.isFinished = !item.isFinished
                         addOrDeleteOrUpdateTask(listId, item, "update")

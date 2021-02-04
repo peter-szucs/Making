@@ -47,14 +47,7 @@ export function isWithinDays(date, days) {
     let today = new Date(Date.now() - 1*24*60*60*1000)
     var dateAhead = new Date()
     dateAhead.setDate(dateAhead.getDate() + (days + 1))
-    console.log("Date ahead: ", dateAhead)
+    // console.log("Date ahead: ", dateAhead)
     return moment(date).isBetween(today, dateAhead, 'day')
 
-}
-
-export function createSectionList(tasksList) {
-    let returnList = []
-    for (const taskList of tasksList) {
-        
-    }
 }
