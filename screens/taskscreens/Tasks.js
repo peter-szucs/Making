@@ -123,21 +123,6 @@ const NewTaskModal = ({ visible, updateVisibility, listId }) => {
     setDate(currentDate)
   }
 
-  function getParsedDate(dateString) {
-    var date = new Date(dateString)
-    var dd = date.getDate()
-    var mm = date.getMonth() + 1
-    var yyyy = date.getFullYear()
-    if (dd < 10) {
-      dd = '0'+ dd
-    }
-    if (mm < 10) {
-      mm = '0' + mm
-    }
-    date = dd + "-" + mm + "-" + yyyy
-    return date.toString()
-  }
- 
   return (
     <Modal visible={visible} transparent={true}>
       <View style={{ 
@@ -172,11 +157,9 @@ const NewTaskModal = ({ visible, updateVisibility, listId }) => {
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, paddingBottom: 20 }}>
             <Button title="Cancel" onPress={() => updateVisibility(false)} />
             <Button title="Done" onPress={async () => {
-              let convertedDate = getParsedDate(date)
-              console.log(convertedDate)
               // Upload new task to DB
-              let taskToUpload = { description: newTaskName, expiryDate: convertedDate, isFinished: false }
-              console.log("Task to upload is: ", taskToUpload)
+              let taskToUpload = { description: newTaskName, expiryDate: date.toString(), isFinished: false }
+              // console.log("Task to upload is: ", taskToUpload)
               await addOrDeleteOrUpdateTask(listId, taskToUpload, "add")
               updateVisibility(false)
               setNewTaskName("New Task")
