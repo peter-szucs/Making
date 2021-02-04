@@ -6,7 +6,6 @@ import { Ionicons } from '@expo/vector-icons';
 import TasksStack from './TasksStack';
 import { Context } from '../context/Context';
 
-//const Stack = createStackNavigator()
 const Tabs = createBottomTabNavigator()
 
 export default function AuthenticatedStack() {
@@ -42,7 +41,7 @@ export default function AuthenticatedStack() {
           labelStyle: { fontSize: 14 }
         }}
         initialRouteName="Main">
-        <Tabs.Screen name="Main" component={Main} options={{ /* tabBarBadge: 3 */ }}/>
+        <Tabs.Screen name="Main" component={Main} />
         <Tabs.Screen name="Tasks" component={TasksStack} />
         <Tabs.Screen name="Settings" component={Settings} />
       </Tabs.Navigator>   

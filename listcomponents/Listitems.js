@@ -1,13 +1,15 @@
 import React, { useContext, useState } from "react";
 import { Image, Pressable, Text, View } from "react-native";
 import { Context } from "../context/Context";
-import { getDateToString, isOverdue } from "../functions";
+import { getDateToString, isOverdue, isToday } from "../functions";
 import { styles, text } from "../styles/styles";
 import { Ionicons } from '@expo/vector-icons';
+import { waitForLongPress } from '../functions';
 
 export function ListItems({ item, navigation, listId }) {
     const { addOrDeleteOrUpdateTask } = useContext(Context)
-    // console.log(item.expiryDate)
+    const [isLongPress, setIsLongPress] = useState(false)
+    
     let iconInfo = {
         name: "checkmark-outline",
         size: 32,
@@ -26,14 +28,12 @@ export function ListItems({ item, navigation, listId }) {
     setIcon()
 
     function checkIfDone(isDone) {
-        // console.log("Is", item.description, "overdue? ", isOverdue(item.expiryDate))
         if (isDone) {
             return "Done"
         } else if (isOverdue(item.expiryDate)) {
             return "Expired: " + getDateToString(item.expiryDate)
         } else {
-            return "Expires: " + getDateToString(item.expiryDate)
-            // return "Expires: " + item.expiryDate
+            return isToday(item.expiryDate) ? "Expires Today!" : "Expires: " + getDateToString(item.expiryDate)
         }
     }
 
@@ -43,11 +43,11 @@ export function ListItems({ item, navigation, listId }) {
                 style={({ pressed }) => [
                     styles.listItems,
                     {
-                        backgroundColor: item.isFinished ? '#bbb' : isOverdue(item.expiryDate) ? 'rgba(255, 50, 0, 0.1)' : pressed
+                        backgroundColor: item.isFinished ? '#bbb' : isOverdue(item.expiryDate) ? 'rgba(255, 50, 0, 0.1)' : isLongPress ? 'rgb(255, 59, 48)' : pressed
                         ? 'rgba(255, 185, 87, 0.4)' : 'white'
                     }
                     ]}
-                delayLongPress={1000}
+                //delayLongPress={1000}
                 onPress={() => {
                     // isFinished toggle
                     // change backgroundcolor to "finished state"
@@ -57,8 +57,14 @@ export function ListItems({ item, navigation, listId }) {
                         addOrDeleteOrUpdateTask(listId, item, "update")
                     }
                 }}
-                onLongPress={() => {
-                    addOrDeleteOrUpdateTask(listId, item, "delete" )
+                onLongPress={async () => {
+                    if (!isOverdue(item.expiryDate) && !item.isFinished) {
+                        setIsLongPress(true)
+                        await waitForLongPress(300)
+                        addOrDeleteOrUpdateTask(listId, item, "delete" )
+                        setIsLongPress(false)
+                        alert('Task deleted')
+                    }
                 }}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     <View style= {{ flexDirection: 'column' }}>

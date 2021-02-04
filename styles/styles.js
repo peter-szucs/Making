@@ -5,7 +5,37 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         alignItems: 'center',
-        //justifyContent: 'center',
+    },
+    mainInfoBox: {
+        flexDirection: 'row', 
+        // padding: 10,
+        marginTop: 40, 
+        justifyContent: 'space-between', 
+        width: '100%', 
+        borderBottomWidth: 2, 
+        borderTopWidth: 2, 
+        borderColor: '#ddd'
+    },
+    mainInfoBoxColumnContainers: {
+        flexDirection: 'column', 
+        padding: 10,
+        // marginTop: 40
+    },
+    healthBarBackground: {
+        backgroundColor: '#fff',
+        height: 22,
+        width: '100%',
+        marginRight: 10,
+        marginTop: 2,
+        borderWidth: 1,
+        borderRadius: 5,
+        alignItems: 'flex-start',
+        justifyContent: 'center'
+    },
+    avatarImage: {
+        borderWidth: 3, 
+        borderColor: '#2b31b3', 
+        borderRadius: 10
     },
     inputView: {
         padding: 10,

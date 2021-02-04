@@ -8,6 +8,7 @@ export default function ContextProvider({ children }) {
     const [user, setUser] = useState();
     const [tasksData, setTasksData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [userObject, setUserObject] = useState({userName: "", totalPoints: 0, avatarPath: "", tasksCompleted: 0, tasksFailed: 0})
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -17,6 +18,12 @@ export default function ContextProvider({ children }) {
         })
         return unsubscribe;
     })
+
+    async function fetchUserInfo() {
+        let userDoc = await db.collection('users').doc(user.uid).get()
+        userToFetch = userDoc.data()
+        return userToFetch
+      }
 
     async function createDatabase(uid, name) {
         await db.collection('users').doc(uid).set({ userName: name, totalPoints: 0 })
@@ -95,6 +102,11 @@ export default function ContextProvider({ children }) {
         }
     }
 
+    const fetchUser = async () => {
+        let n = await fetchUserInfo()
+        setUserObject(n)
+      }
+
     const fetchTasksList = async (uid) => {
         try {
             console.log("Fetch started")
@@ -153,7 +165,7 @@ export default function ContextProvider({ children }) {
     }
 
     return (
-        <Context.Provider value={{ isLoading, user, tasksData, logIn, signOut, signUp, fetchTasksList, createNewList, deleteList, addOrDeleteOrUpdateTask }}>
+        <Context.Provider value={{ isLoading, user, userObject, tasksData, logIn, signOut, signUp, fetchUser, fetchTasksList, createNewList, deleteList, addOrDeleteOrUpdateTask }}>
             {children}
         </Context.Provider>
     );

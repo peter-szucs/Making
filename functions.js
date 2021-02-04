@@ -15,11 +15,27 @@ export function getParsedDate(dateString) {
     }
     date = dd + "-" + mm + "-" + yyyy
     return date.toString()
-  }
+}
+
+export function waitForLongPress(delay) {
+    return new Promise( res => setTimeout(res, delay))
+}
+
+export function isToday(date) {
+    let today = new Date()
+    return moment(date).isSame(today, 'day')
+}
 
 export function isOverdue(date) {
     let today = new Date()
-    return moment(date).isBefore(today)
+    if (moment(date).isBefore(today)) {
+        if (moment(date).isSame(today, 'day')) {
+            return false
+        } else {
+            return true
+        }
+    }
+    return false
 }
 
 export function getDateToString(date) {
