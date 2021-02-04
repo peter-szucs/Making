@@ -8,7 +8,7 @@ export const Context = createContext();
 export default function ContextProvider({ children }) {
     const [user, setUser] = useState();
     const [tasksData, setTasksData] = useState([]);
-    const [sectionListData, setSectionListData] = useState([])
+    const [sectionListData, setSectionListData] = useState()
     const [isLoading, setIsLoading] = useState(true);
     const [userObject, setUserObject] = useState({userName: "", totalPoints: 0, avatarPath: "", tasksCompleted: 0, tasksFailed: 0})
 
@@ -97,8 +97,8 @@ export default function ContextProvider({ children }) {
                 }
             }
         }
-        returnList = [{heading: "Today", items: todayList}, {heading: "Tomorrow", items: tomorrowList}, {heading: "Upcoming", items: upcomingList}]
-        // console.log("Returnlist: ", returnList)
+        returnList = [{heading: "Today", data: todayList}, {heading: "Tomorrow", data: tomorrowList}, {heading: "Upcoming", data: upcomingList}]
+        console.log("Returnlist: ", returnList)
         return returnList
     }
 
@@ -158,8 +158,8 @@ export default function ContextProvider({ children }) {
             let tempListOfTasks = await fetchListOfTasks(uid)
             let fetchedTaskData = await fetchTasks(uid, tempListOfTasks)
             setTasksData(fetchedTaskData)
-            // let sectionList = createSectionList(fetchedTaskData)
-            let sectionList = createMainScreenList(fetchedTaskData)
+            let sectionList = createSectionList(fetchedTaskData)
+            // let sectionList = createMainScreenList(fetchedTaskData)
             setSectionListData(sectionList)
             console.log("Fetch done")
         } catch (error) {

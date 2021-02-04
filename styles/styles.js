@@ -14,11 +14,12 @@ const styles = StyleSheet.create({
         width: '100%', 
         borderBottomWidth: 2, 
         borderTopWidth: 2, 
-        borderColor: '#ddd'
+        borderColor: '#aaa'
     },
     mainInfoBoxColumnContainers: {
         flexDirection: 'column', 
         padding: 10,
+        // backgroundColor: 'white',
         // marginTop: 40
     },
     healthBarBackground: {
@@ -100,7 +101,13 @@ const text =  StyleSheet.create({
         : 10
     },
     mainInfoBoxText: {
-        padding: 5
+        padding: 5,
+        color: 'white'
+    },
+    sectionHeaderText: {
+        paddingLeft: 5,
+        fontSize: 24,
+        fontWeight: '500'
     }
 });
 
