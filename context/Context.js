@@ -71,6 +71,13 @@ export default function ContextProvider({ children }) {
         })
     }
 
+    function createSectionList(tasksList) {
+        let returnList = []
+        for (const taskList of tasksList) {
+            
+        }
+    }
+
     const logIn = async (email, password) => {
         console.log("calling log in")
         try {
@@ -113,6 +120,8 @@ export default function ContextProvider({ children }) {
             let tempListOfTasks = await fetchListOfTasks(uid)
             let fetchedTaskData = await fetchTasks(uid, tempListOfTasks)
             setTasksData(fetchedTaskData)
+            let sectionList = createSectionList(fetchedTaskData)
+            // set state
             console.log("Fetch done")
         } catch (error) {
             console.log("error: ", error)
@@ -147,7 +156,7 @@ export default function ContextProvider({ children }) {
                     console.log("Task added")
                     break;
                 case "update":
-                    await dbRef.doc(data.taskId).update(data)
+                    await dbRef.doc(data.taskId).update({description: data.description, expiryDate: data.expiryDate, isFinished: data.isFinished})
                     console.log("Task updated")
                     break;
                 case "delete":

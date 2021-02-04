@@ -82,6 +82,12 @@ const buttons = StyleSheet.create({
 });
 
 const text =  StyleSheet.create({
+    mainScreenListTitle: {
+        fontSize: 22,
+        fontWeight: 'bold',
+        padding: 10,
+        alignSelf: 'flex-start'
+    },
     listTitleBig: {
         fontSize: 26,
         fontWeight: 'bold',
@@ -92,6 +98,9 @@ const text =  StyleSheet.create({
         fontWeight: '500',
         paddingBottom
         : 10
+    },
+    mainInfoBoxText: {
+        padding: 5
     }
 });
 

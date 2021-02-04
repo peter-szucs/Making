@@ -38,7 +38,7 @@ export default function TasksLists({ navigation }) {
               navigation={navigation} />
           }
           //refreshing={willRefresh}
-          //keyExtractor={( item, index ) => item.id.toString()} 
+          keyExtractor={ item => item.id.toString()} 
         />
         <NewListModal visible={isVisible} updateVisibility={setIsVisible} />
 

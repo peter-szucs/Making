@@ -60,37 +60,9 @@ export default function Tasks({ navigation, route }) {
     return sortedByFinishList
   }
 
-  //
+  
   //--------TESTING------------
-  function getParsedDate(dateString) {
-    var date = new Date(dateString)
-    var dd = date.getDate()
-    var mm = date.getMonth() + 1
-    var yyyy = date.getFullYear()
-    if (dd < 10) {
-      dd = '0'+ dd
-    }
-    if (mm < 10) {
-      mm = '0' + mm
-    }
-    date = dd + "-" + mm + "-" + yyyy
-    return date.toString()
-  }
 
-  function checkTimePassed(item) {
-    let currentDate = getParsedDate(new Date())
-    console.log("Task:", item.description, "expires: ", item.expiryDate)
-    console.log("Date now: ", currentDate)
-    if (!item.isFinished) {
-      if (item.expiryDate < currentDate) {
-        console.log("Expired")
-      } else {
-        console.log("still valid")
-      }
-    } else {
-      console.log("Already done")
-    }
-  }
   //-----------------------------
 
   return (
@@ -104,7 +76,7 @@ export default function Tasks({ navigation, route }) {
               navigation={navigation}
               listId={route.params.item.id} />
           }
-          keyExtractor={( item, index ) => index.toString()} />
+          keyExtractor={ item => item.taskId.toString()} />
         <NewTaskModal visible={isVisible} updateVisibility={setIsVisible} listId={route.params.item.id} />
     </View>  
         
@@ -158,7 +130,8 @@ const NewTaskModal = ({ visible, updateVisibility, listId }) => {
             <Button title="Cancel" onPress={() => updateVisibility(false)} />
             <Button title="Done" onPress={async () => {
               // Upload new task to DB
-              let taskToUpload = { description: newTaskName, expiryDate: date.toString(), isFinished: false }
+              console.log("date: ", date, "toString: ", date.toISOString())
+              let taskToUpload = { description: newTaskName, expiryDate: date.toISOString(), isFinished: false }
               // console.log("Task to upload is: ", taskToUpload)
               await addOrDeleteOrUpdateTask(listId, taskToUpload, "add")
               updateVisibility(false)
