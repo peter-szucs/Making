@@ -3,9 +3,6 @@ import { Image, ImageBackground, SectionList, StatusBar, Text, View } from 'reac
 import { Context } from '../context/Context';
 import { styles, text } from '../styles/styles';
 import { useEffect, useState } from 'react/cjs/react.development';
-import { isWithinDays } from '../functions';
-import { FlatList } from 'react-native-gesture-handler';
-import { ListItems } from '../listcomponents/Listitems';
 import { MainListItems } from '../listcomponents/MainListItems';
 
 export default function Main({ navigation }) {

@@ -10,11 +10,10 @@ export default function ContextProvider({ children }) {
     const [tasksData, setTasksData] = useState([]);
     const [sectionListData, setSectionListData] = useState()
     const [isLoading, setIsLoading] = useState(true);
-    const [userObject, setUserObject] = useState({userName: "", totalPoints: 0, avatarPath: "", tasksCompleted: 0, tasksFailed: 0})
+    const [userObject, setUserObject] = useState({userName: "", totalPoints: 0, avatarPath: 0, tasksCompleted: 0, tasksFailed: 0})
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((user) => {
-            //console.log("auth change useEffect called")
             setUser(user)
             setIsLoading(false)
         })
@@ -28,7 +27,7 @@ export default function ContextProvider({ children }) {
       }
 
     async function createDatabase(uid, name) {
-        await db.collection('users').doc(uid).set({ userName: name, totalPoints: 0 })
+        await db.collection('users').doc(uid).set({ userName: name, totalPoints: 0, avatarPath: 0, tasksCompleted: 0, tasksFailed: 0 })
     }
 
     async function fetchListOfTasks(uid) {
@@ -99,20 +98,6 @@ export default function ContextProvider({ children }) {
         }
         returnList = [{heading: "Today", data: todayList}, {heading: "Tomorrow", data: tomorrowList}, {heading: "Upcoming", data: upcomingList}]
         console.log("Returnlist: ", returnList)
-        return returnList
-    }
-
-    function createMainScreenList(tasksList) {
-        let returnList = []
-        for (const taskList of tasksList) {
-            for (const task of taskList.tasks) {
-                if (!isOverdue(task) && !task.isFinished && isWithinDays(task.expiryDate, 5)) {
-                    let itemToPush = { ...task, taskListId: taskList.id }
-                    // console.log("upcoming item To push: ", itemToPush)
-                    returnList.push(itemToPush) 
-                }
-            }
-        }
         return returnList
     }
 

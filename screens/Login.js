@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Button, Image, Keyboard, KeyboardAvoidingView, Platform, Text, View } from 'react-native';
+import { Image, Keyboard, KeyboardAvoidingView, Platform, Text, View } from 'react-native';
 import { TextInput, TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Context } from '../context/Context';
 import { styles, buttons } from '../styles/styles';
@@ -57,7 +57,11 @@ export default function Login({ navigation }) {
                                 <Text style={{ fontSize: 18 }}>Log In</Text>
                         </TouchableOpacity>
                     </View>
-                    <Button title="No user? Create one here" onPress={createUser} />
+                    <TouchableOpacity
+                        style={{ padding: 10 }}
+                        onPress={createUser}>
+                            <Text style={{ fontSize: 18, color: '#007bff' }}>No user? Create one here</Text>
+                    </TouchableOpacity>
                 </View>
             </TouchableWithoutFeedback>
             
