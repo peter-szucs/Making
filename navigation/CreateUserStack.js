@@ -1,14 +1,12 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import LogIn from '../screens/Login';
 import CreateUser from '../screens/CreateUser';
 
 const Stack = createStackNavigator()
 
-export default function UnauthenticatedStack() {
+export default function CreateUserStack() {
   return (
-      <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen name="Login" component={LogIn} />
+      <Stack.Navigator initialRouteName="CreateUser">
         <Stack.Screen name="CreateUser" component={CreateUser} />
       </Stack.Navigator>   
   );

@@ -1,13 +1,13 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
+import { Context } from '../context/Context';
 import AuthenticatedStack from './AuthenticatedStack';
 import UnauthenticatedStack from './UnauthenticatedStack';
-import { AuthContext } from '../context/AuthContext';
 import Splash from '../screens/Splash';
 
 
 export default function Navigation() {
-    const { user, isLoading } = useContext(AuthContext);
+    const { user, isLoading, fetchTasksList } = useContext(Context);
 
     if (isLoading) {
         return <Splash />
@@ -15,9 +15,7 @@ export default function Navigation() {
 
     return (
         <NavigationContainer>
-            {
-                user ? <AuthenticatedStack /> : <UnauthenticatedStack />
-            }
+            {user ? <AuthenticatedStack /> : <UnauthenticatedStack />}
         </NavigationContainer>
 
     );

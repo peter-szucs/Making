@@ -1,21 +1,39 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useContext } from 'react';
+import { Button, Image, StyleSheet, Text, View } from 'react-native';
+import { Context } from '../context/Context';
+import { styles, buttons } from '../styles/styles';
+import { db } from '../firebase';
+import { useEffect, useState } from 'react/cjs/react.development';
+import { TextInput } from 'react-native-gesture-handler';
 
-export default function Main() {
+export default function Main({ navigation }) {
+  const { user } = useContext(Context)
+  const [userObject, setUserObject] = useState({userName: "", totalPoints: 0})
+  let logo = require('../assets/Logo.png')
+
+  async function fetchUser() {
+    let userToFetch = { userName: "", totalPoints: 0 }
+    let userDoc = await db.collection('users').doc(user.uid).get()
+    userToFetch = userDoc.data()
+    return userToFetch
+  } 
+  
+
+  useEffect(() => {
+    async function fetch() {
+      let n = await fetchUser()
+      await setUserObject(n)
+    }
+    fetch()
+  }, [])
+
   return (
-    <View style={styles.container}>
-      <Text>Main Screen</Text>
+    <View style={{...styles.container, justifyContent: 'center'}}>
+      <Image source={logo} />
+      <Text style={{ fontSize: 30, fontWeight: 'bold' }}>Main Screen</Text>
+      <Text>Username: {userObject.userName}</Text>
       <StatusBar style="auto" />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
