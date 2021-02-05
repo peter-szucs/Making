@@ -5,7 +5,7 @@ import CreateUser from '../screens/CreateUser';
 
 const Stack = createStackNavigator()
 
-export default function AuthenticatedStack() {
+export default function UnauthenticatedStack() {
   return (
       <Stack.Navigator initialRouteName="Login">
         <Stack.Screen name="Login" component={LogIn} />
