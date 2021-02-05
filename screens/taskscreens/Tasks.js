@@ -3,7 +3,7 @@ import { Button, Modal, Platform, Text, View } from 'react-native';
 import { FlatList, TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { Context } from '../../context/Context';
 import { ListItems } from '../../listcomponents/Listitems';
-import { styles, buttons } from '../../styles/styles';
+import { styles, buttons, text } from '../../styles/styles';
 import { Ionicons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
@@ -105,7 +105,7 @@ const NewTaskModal = ({ visible, updateVisibility, listId }) => {
         alignItems: 'center' 
       }} >
         <View style={{ 
-          backgroundColor: 'white',
+          backgroundColor: 'rgba(255, 255, 255, 0.9)',
           justifyContent: 'space-around',
           alignItems: 'center',
           borderRadius: 10,
@@ -113,12 +113,12 @@ const NewTaskModal = ({ visible, updateVisibility, listId }) => {
         }} >
           <Text style={{ padding: 20, fontSize: 18 }}>{newTaskName}</Text>
           <TextInput
-            style={{ width: '90%', padding: 10, backgroundColor: '#eee', borderRadius: 10 }}
+            style={{ width: '90%', padding: 10, backgroundColor: '#ddd', borderRadius: 10 }}
             placeholder="Enter name of task"
             onChangeText={(text) => setNewTaskName(text)} />
-          <Text>Set Expiry Date</Text>
+          <Text style={text.expirySetText}>Set Expiry Date:</Text>
           <DateTimePicker 
-            style={{ width: '100%', backgroundColor: '#fff' }}
+            style={{ width: '100%'  }}
             testID="dateTimePicker" 
             value={date}
             mode="date"

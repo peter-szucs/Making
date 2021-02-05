@@ -108,6 +108,10 @@ const text =  StyleSheet.create({
         paddingLeft: 5,
         fontSize: 24,
         fontWeight: '500'
+    },
+    expirySetText: {
+        fontSize: 16,
+        paddingTop: 10
     }
 });
 

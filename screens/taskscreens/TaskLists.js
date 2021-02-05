@@ -60,15 +60,15 @@ const NewListModal = ({ visible, updateVisibility }) => {
         alignItems: 'center' 
       }} >
         <View style={{ 
-          backgroundColor: 'white',
+          backgroundColor: 'rgba(255, 255, 255, 0.9)',
           justifyContent: 'space-around',
           alignItems: 'center',
           borderRadius: 10,
-          width: '70%'
+          width: '80%'
         }} >
           <Text style={{ padding: 20, fontSize: 18 }}>{newListName}</Text>
           <TextInput
-            style={{ width: '80%', padding: 10, backgroundColor: '#eee' }}
+            style={{ width: '80%', padding: 10, backgroundColor: '#ddd', borderRadius: 10 }}
             placeholder="Enter name of list"
             onChangeText={(text) => setNewListName(text)} />
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, paddingTop: 10, paddingBottom: 20 }}>
