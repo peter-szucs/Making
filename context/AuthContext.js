@@ -5,7 +5,7 @@ import { auth } from '../firebase';
 export const AuthContext = createContext();
 
 export default function AuthContextProvider({ children }) {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isCreatingUser, setIsCreatingUser] = useState(false);
     const [user, setUser] = useState();
     const [isLoading, setIsLoading] = useState(true);
 
@@ -38,8 +38,17 @@ export default function AuthContextProvider({ children }) {
         }
     }
 
+    const signUp = async (email, password) => {
+        try {
+            await auth.createUserWithEmailAndPassword(email, password)
+            console.log("Creating User")
+        } catch (error) {
+            console.log("error: ", error)
+        }
+    }
+
     return (
-        <AuthContext.Provider value={{ isLoading, user, logIn, signOut }}>
+        <AuthContext.Provider value={{ isLoading, user, logIn, signOut, signUp }}>
             {children}
         </AuthContext.Provider>
     );

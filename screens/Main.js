@@ -1,8 +1,26 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useContext } from 'react';
+import { Button, StyleSheet, Text, View } from 'react-native';
+import { AuthContext } from '../context/AuthContext';
+import { styles, buttons } from '../styles/styles';
 
-export default function Main() {
+export default function Main({ navigation }) {
+  const { user, signOut } = useContext(AuthContext)
+
+  // Will be removed, put in profile
+  navigation.setOptions({
+    headerRight: () => (
+      <Button 
+        title="Log Out"
+        onPress={logOut} />
+    )
+  })
+
+  const logOut = () => {
+    console.log("Loggin out")
+    signOut()
+  }
+
   return (
     <View style={styles.container}>
       <Text>Main Screen</Text>
@@ -10,12 +28,3 @@ export default function Main() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
