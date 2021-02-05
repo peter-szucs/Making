@@ -57,7 +57,7 @@ export function ListItems({ item, listId }) {
         ]}
         //delayLongPress={1000}
         onPress={() => {
-          if (!item.isFinished) {
+          if (!item.isFinished && !isOverdue(item.expiryDate)) {
             item.isFinished = !item.isFinished;
             addOrDeleteOrUpdateTask(listId, item, 'update');
           }
