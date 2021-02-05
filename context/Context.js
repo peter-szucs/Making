@@ -10,7 +10,8 @@ export default function ContextProvider({ children }) {
     const [tasksData, setTasksData] = useState([]);
     const [sectionListData, setSectionListData] = useState()
     const [isLoading, setIsLoading] = useState(true);
-    const [userObject, setUserObject] = useState({userName: "", totalPoints: 0, avatarPath: 0, tasksCompleted: 0, tasksFailed: 0})
+    const [userObject, setUserObject] = useState({userName: "", totalPoints: 0, avatarPath: 0, tasksCompleted: 0})
+    const [tasksFailed, setTasksFailed] = useState(0)
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -27,11 +28,11 @@ export default function ContextProvider({ children }) {
       }
 
     async function createDatabase(uid, name) {
-        await db.collection('users').doc(uid).set({ userName: name, totalPoints: 0, avatarPath: 0, tasksCompleted: 0, tasksFailed: 0 })
+        await db.collection('users').doc(uid).set({ userName: name, totalPoints: 0, avatarPath: 0, tasksCompleted: 0 })
     }
 
     async function fetchListOfTasks(uid) {
-        let taskListItem = { id: "", name: "", tasks: [{ taskId: "", description: "", expiryDate: "", isFinished: false }] }
+        let taskListItem = { id: "", name: "", tasks: [{ taskId: "", description: "", expiryDate: "", isFinished: false, isExpired: false }] }
         let tempTaskList = []
         
         let taskDoc = await db.collection('users').doc(uid).collection('taskLists').get()
@@ -49,9 +50,7 @@ export default function ContextProvider({ children }) {
         let returnList = []
 
         for (const task of list) {
-            //let taskItemInfo = { taskId: "", description: "", expiryDate: "", isFinished: false }
             let taskItemInfoList = []
-            //let taskItem = { id: "", name: "", tasks: [{ taskId: "", description: "", expiryDate: "", isFinished: false }] }
             let taskItem = task
             let dbTasks = await db.collection('users').doc(uid).collection('taskLists').doc(task.id).collection('tasks').get()
             dbTasks.forEach(function(doc) {
@@ -79,7 +78,7 @@ export default function ContextProvider({ children }) {
         let upcomingList = []
         for (const taskList of tasksList) {
             for (const task of taskList.tasks) {
-                if (!isOverdue(task) && !task.isFinished && isWithinDays(task.expiryDate, 5)) {
+                if (!isOverdue(task.expiryDate) && !task.isFinished && isWithinDays(task.expiryDate, 5)) {
                     if (isToday(task.expiryDate)) {
                         let itemToPush = { ...task, taskListId: taskList.id }
                         // console.log("today item To push: ", itemToPush)
@@ -97,8 +96,32 @@ export default function ContextProvider({ children }) {
             }
         }
         returnList = [{heading: "Today", data: todayList}, {heading: "Tomorrow", data: tomorrowList}, {heading: "Upcoming", data: upcomingList}]
-        console.log("Returnlist: ", returnList)
+        // console.log("Returnlist: ", returnList)
         return returnList
+    }
+
+    function getFailedTaskAmount(list) {
+        console.log("Inside getFailedFunc")
+        let fails = 0
+        for (const taskList of list) {
+            for (const task of taskList.tasks) {
+                if (isOverdue(task.expiryDate)) {
+                    fails += 1
+                    if (!task.isExpired) {
+                        updateToExpiredTask(taskList.id, task.taskId)
+                    }
+                }
+            }
+        }
+        console.log("Number of fails: ", fails)
+        return fails
+    }
+
+    const updateToExpiredTask = async (listId, taskId) => {
+        let newTotalPoints = userObject.totalPoints - 2
+        await db.collection('users').doc(user.uid).collection('taskLists').doc(listId).collection('tasks').doc(taskId).update({isExpired: true})
+        await db.collection('users').doc(user.uid).update({ totalPoints: newTotalPoints })
+        fetchUser()
     }
 
     const logIn = async (email, password) => {
@@ -133,8 +156,9 @@ export default function ContextProvider({ children }) {
     }
 
     const fetchUser = async () => {
-        let n = await fetchUserInfo()
-        setUserObject(n)
+        console.log("Fetch User called")
+        let uo = await fetchUserInfo()
+        setUserObject(uo)
       }
 
     const fetchTasksList = async (uid) => {
@@ -144,8 +168,9 @@ export default function ContextProvider({ children }) {
             let fetchedTaskData = await fetchTasks(uid, tempListOfTasks)
             setTasksData(fetchedTaskData)
             let sectionList = createSectionList(fetchedTaskData)
-            // let sectionList = createMainScreenList(fetchedTaskData)
             setSectionListData(sectionList)
+            let tf = getFailedTaskAmount(fetchedTaskData)
+            setTasksFailed(tf)
             console.log("Fetch done")
         } catch (error) {
             console.log("error: ", error)
@@ -180,8 +205,11 @@ export default function ContextProvider({ children }) {
                     console.log("Task added")
                     break;
                 case "update":
-                    await dbRef.doc(data.taskId).update({description: data.description, expiryDate: data.expiryDate, isFinished: data.isFinished})
-                    console.log("Task updated")
+                    let newTotalPoints = userObject.totalPoints + 2
+                    let newTasksCompleted = userObject.tasksCompleted + 1
+                    await dbRef.doc(data.taskId).update({description: data.description, expiryDate: data.expiryDate, isFinished: data.isFinished, isExpired: data.isExpired})
+                    await db.collection('users').doc(user.uid).update({ totalPoints: newTotalPoints, tasksCompleted: newTasksCompleted })
+                    console.log("Task and user updated")
                     break;
                 case "delete":
                     await dbRef.doc(data.taskId).delete()
@@ -192,13 +220,14 @@ export default function ContextProvider({ children }) {
                     break;
             }
             fetchTasksList(user.uid)
+            fetchUser()
         } catch (error) {
             console.log("error: ", error)
         }
     }
 
     return (
-        <Context.Provider value={{ isLoading, user, userObject, tasksData, sectionListData, logIn, signOut, signUp, fetchUser, fetchTasksList, createNewList, deleteList, addOrDeleteOrUpdateTask }}>
+        <Context.Provider value={{ isLoading, user, userObject, tasksData, sectionListData, tasksFailed, logIn, signOut, signUp, fetchUser, fetchTasksList, createNewList, deleteList, addOrDeleteOrUpdateTask }}>
             {children}
         </Context.Provider>
     );

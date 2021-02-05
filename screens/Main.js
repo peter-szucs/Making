@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react/cjs/react.development';
 import { MainListItems } from '../listcomponents/MainListItems';
 
 export default function Main({ navigation }) {
-  const { user, userObject, fetchUser, sectionListData } = useContext(Context)
+  const { userObject, fetchUser, sectionListData, tasksFailed } = useContext(Context)
 
   let logo = require('../assets/Logo.png')
   let topBarBackgroundPic = require('../assets/TopBarCut.png')
@@ -25,6 +25,7 @@ export default function Main({ navigation }) {
 
   useEffect(() => {
     // update list of tasks here
+    
   }, [userObject])
 
   return (
@@ -37,7 +38,7 @@ export default function Main({ navigation }) {
             <Text style={{ ...text.mainInfoBoxText, fontSize: 24, fontWeight: 'bold' }}>{userObject.userName}</Text>
             <Text style={{ ...text.mainInfoBoxText, fontSize: 16 }}>Points: {userObject.totalPoints}</Text>
             <Text style={text.mainInfoBoxText}>Completed Tasks: {userObject.tasksCompleted}({userObject.tasksCompleted * 2} points)</Text>
-            <Text style={{ ...text.mainInfoBoxText, color: 'rgb(255, 59, 48)', backgroundColor: 'rgba(200, 200, 200, 0.2)' }}>Tasks failed: {userObject.tasksFailed}(-{userObject.tasksFailed * 2} points)</Text>
+            <Text style={{ ...text.mainInfoBoxText, color: 'rgb(255, 59, 48)', backgroundColor: 'rgba(200, 200, 200, 0.2)' }}>Tasks failed: {tasksFailed}(-{tasksFailed * 2} points)</Text>
           </View>
           <View style={styles.mainInfoBoxColumnContainers}>
             <Image source={avatarPaths[userObject.avatarPath]} style={styles.avatarImage}/>

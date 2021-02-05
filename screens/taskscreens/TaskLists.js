@@ -7,7 +7,7 @@ import { TaskListItems } from '../../listcomponents/TaskListItems';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function TasksLists({ navigation }) {
-  const { user, tasksData } = useContext(Context)
+  const { tasksData } = useContext(Context)
   const [isVisible, setIsVisible] = useState(false)
   
   useLayoutEffect(() => {

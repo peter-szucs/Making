@@ -48,7 +48,6 @@ export default function Tasks({ navigation, route }) {
         listToSet = sortList(listToSort)
       }
     }
-    console.log("List data used in Tasks Flatlist: ", listToSet)
     setListData(listToSet)
   }
 
@@ -131,8 +130,8 @@ const NewTaskModal = ({ visible, updateVisibility, listId }) => {
             <Button title="Cancel" onPress={() => updateVisibility(false)} />
             <Button title="Done" onPress={async () => {
               // Upload new task to DB
-              console.log("date: ", date, "toString: ", date.toISOString())
-              let taskToUpload = { description: newTaskName, expiryDate: date.toISOString(), isFinished: false }
+              // console.log("date: ", date, "toString: ", date.toISOString())
+              let taskToUpload = { description: newTaskName, expiryDate: date.toISOString(), isFinished: false, isExpired: false }
               // console.log("Task to upload is: ", taskToUpload)
               await addOrDeleteOrUpdateTask(listId, taskToUpload, "add")
               updateVisibility(false)
